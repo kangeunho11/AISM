@@ -12,27 +12,42 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # OpenAI를 활용한 함수들
 def generate_cocktail_recipe(ingredients):
     prompt = f"Create a cocktail recipe using the following ingredients: {ingredients}."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7  # 창의성을 조절하는 값
+        )
+        recipe = response.choices[0].message['content'].strip()  # 응답 내용 추출
+        return recipe
+    except Exception as e:
+        return f"Error: {e}"
 
 def recommend_pairing(food):
     prompt = f"Recommend alcohol pairings for the food: {food}."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7
+        )
+        pairing = response.choices[0].message['content'].strip()
+        return pairing
+    except Exception as e:
+        return f"Error: {e}"
 
 def get_alcohol_review(alcohol_name):
     prompt = f"Summarize reviews and information about {alcohol_name}."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.7
+        )
+        review = response.choices[0].message['content'].strip()
+        return review
+    except Exception as e:
+        return f"Error: {e}"
 
 # Streamlit 앱 UI
 st.title("AI 소믈리에")
