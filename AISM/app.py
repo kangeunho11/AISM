@@ -9,6 +9,31 @@ load_dotenv()
 # OpenAI API 키 설정
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# OpenAI를 활용한 함수들
+def generate_cocktail_recipe(ingredients):
+    prompt = f"Create a cocktail recipe using the following ingredients: {ingredients}."
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response['choices'][0]['message']['content']
+
+def recommend_pairing(food):
+    prompt = f"Recommend alcohol pairings for the food: {food}."
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response['choices'][0]['message']['content']
+
+def get_alcohol_review(alcohol_name):
+    prompt = f"Summarize reviews and information about {alcohol_name}."
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    return response['choices'][0]['message']['content']
+
 # Streamlit 앱 UI
 st.title("AI 소믈리에")
 tab1, tab2, tab3 = st.tabs(["칵테일 생성", "음식 페어링", "술 리뷰"])
@@ -45,28 +70,3 @@ with tab3:
             st.write("술 리뷰: ", review)
         else:
             st.warning("술 이름을 입력해주세요.")
-
-# OpenAI를 활용한 함수들
-def generate_cocktail_recipe(ingredients):
-    prompt = f"Create a cocktail recipe using the following ingredients: {ingredients}."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
-
-def recommend_pairing(food):
-    prompt = f"Recommend alcohol pairings for the food: {food}."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
-
-def get_alcohol_review(alcohol_name):
-    prompt = f"Summarize reviews and information about {alcohol_name}."
-    response = openai.ChatCompletion.create(
-        model="gpt-4",
-        messages=[{"role": "user", "content": prompt}]
-    )
-    return response['choices'][0]['message']['content']
