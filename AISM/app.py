@@ -45,12 +45,14 @@ def generate_cocktail_recipe(ingredients):
     """재료를 기반으로 칵테일 레시피 생성"""
     prompt = f"{ingredients}를(을) 사용한 칵테일 레시피를 한국어로 만들어주세요."
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}],
+        # 최신 OpenAI API 버전 사용
+        response = openai.Completion.create(
+            model="gpt-4",  # 'gpt-4' 모델 사용
+            prompt=prompt,
+            max_tokens=200,  # 최대 토큰 설정
             temperature=0.7
         )
-        recipe = response.choices[0].message['content'].strip()
+        recipe = response.choices[0].text.strip()  # 최신 버전에서는 .text로 결과 가져옴
         return post_process_translation(recipe)  # 한국어로 응답 후 후처리
     except Exception as e:
         return f"Error: {e}"
@@ -59,12 +61,14 @@ def recommend_pairing(food):
     """음식에 어울리는 술 추천"""
     prompt = f"{food}에 어울리는 술을 한국어로 추천해주세요."
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4",
-            messages=[{"role": "user", "content": prompt}],
+        # 최신 OpenAI API 버전 사용
+        response = openai.Completion.create(
+            model="gpt-4",  # 'gpt-4' 모델 사용
+            prompt=prompt,
+            max_tokens=200,  # 최대 토큰 설정
             temperature=0.7
         )
-        pairing = response.choices[0].message['content'].strip()
+        pairing = response.choices[0].text.strip()  # 최신 버전에서는 .text로 결과 가져옴
         return post_process_translation(pairing)  # 한국어로 응답 후 후처리
     except Exception as e:
         return f"Error: {e}"
